@@ -1,38 +1,38 @@
 import nltk
 from nltk import SnowballStemmer
 from nltk.corpus import stopwords, wordnet
-from textblob import TextBlob
 import time
 from spellchecker import SpellChecker
 import re
 
-nltk.download('stopwords')
-nltk.download('averaged_perceptron_tagger')
-nltk.download('averaged_perceptron_tagger')
-nltk.download('wordnet')
-nltk.download('omw-1.4')
+start_time = time.time()
+# nltk.download('stopwords')
+# nltk.download('averaged_perceptron_tagger')
+# nltk.download('averaged_perceptron_tagger')
+# nltk.download('wordnet')
+# nltk.download('omw-1.4')
+
 
 spell = SpellChecker()
-start_time = time.time()  # 获取当前时间
-STOPWORDS = set(stopwords.words('english'))
 
+STOPWORDS = set(stopwords.words('english'))
 
 def preprocess_query(query):
     query = query.lower()
     query = re.sub(r'[^\w\s]', '', query)
-    # 将查询语句分割成单词列表
+    # Split the query statement into a list of words
     tokens = query.split()
     message = []
 
-    # 检查单词数量是否超过20个
+    # Check if the number of words exceeds 20
     if len(tokens) > 20:
-        # 如果超过20个，警告用户并只使用前20个单词
+        # If there are more than 20, warn the user and use only the first 20 words
         warning_message = "Your query contains more than 20 words. Only the first 20 words will be considered."
         message.append(warning_message)
         processed_query = ' '.join(tokens[:20])
         return processed_query, message
     else:
-        # 如果没有超过，返回原始查询
+        # If not, return to the original query
         return query, message
 
 
@@ -86,8 +86,7 @@ def query_expansion(query,max_cap = 2):
                     synonyms_set.add(synonym)
                     counter += 1
                     if counter >= max_cap:
-                        return  # 提前返回以跳出函数
-
+                        return
     for item, (word, tag) in zip(filtered_words, pos):
         currentPOS = _get_wordnet_pos(tag)
         if item in synset_cache:
@@ -96,31 +95,28 @@ def query_expansion(query,max_cap = 2):
             synsets = wordnet.synsets(item, pos=currentPOS) or wordnet.synsets(stemmer.stem(item), pos=currentPOS)
             synset_cache[item] = synsets
 
-        add_synonyms(item, synsets)  # 封装的添加同义词逻辑
+        add_synonyms(item, synsets)
 
     extensions = list(synonyms_set - original_words)
 
     return extensions
 
 
-
-# 测试全部模块
+# Test All functions
 query = "Machine learning computer science Machine Machine Machine Machine Machine Machine Machine Machine Machine Machine"
-# query = "Hallo My name is Yuan Liu"
+# query = "Hallo My name is XXX XX"
 preprocessed_query = preprocess_query(query)
 corrected_query, message = correct_spelling(preprocessed_query)
 print("Processed query:", corrected_query)
 print(message)
-print(query_expansion(corrected_query))
+# print(query_expansion(corrected_query))
 
-#  测试预处理模块
+# Test preprocessing module
 # query = "This is a test query to check how the preprocessing module works when the input has more than twenty words"
 # corrected_query, message = preprocess_query(query)
 # print("Processed query:", corrected_query)
 # print(message)
 
-# print("Message:", message)
 
-
-end_time = time.time()  # 获取当前时间
+end_time = time.time()
 print(f"Execution time: {end_time - start_time} seconds")
