@@ -45,3 +45,12 @@
 | **Recipe Search and Recommendation Engine** <br />https://github.com/Ethan-Yang0101/Text-Technology-For-Data-Science |          |            |          |
 | TTDS Paper Search<br />https://github.com/jiaqingxie/AI-paper-search-engine |          |            |          |
 
+gcloud compute scp F:\preprocessed_titles.txt feimeet0728@ttds:
+
+sudo dkms install -m nvidia -v srv-470.223.02
+
+sudo dkms install -m nvidia-current-470.223.02
+
+
+
+sudo dkms install -m nvidia -v current-470.223.02
